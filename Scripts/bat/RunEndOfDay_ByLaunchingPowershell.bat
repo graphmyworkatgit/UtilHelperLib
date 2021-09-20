@@ -1,0 +1,1 @@
+﻿Powershell.exe -- executionpolicty remotesigned -File ..\powershell\kill_chromedrivers.ps1

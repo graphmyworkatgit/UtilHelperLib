@@ -6,13 +6,45 @@ using System.IO;
 using System.Xml.Serialization;
 using UtilHelper.Serialization;
 using System.Collections.Generic;
+using Microsoft.Extensions.Hosting;
+
 namespace UtilHelperLib
 {
+    public class Serializer
+    {
+        public T Deserialize<T>(string input) where T : class
+        {
+            System.Xml.Serialization.XmlSerializer ser = new System.Xml.Serialization.XmlSerializer(typeof(T));
+
+            using (StringReader sr = new StringReader(input))
+            {
+                return (T)ser.Deserialize(sr);
+            }
+        }
+
+        public string Serialize<T>(T ObjectToSerialize)
+        {
+            XmlSerializer xmlSerializer = new XmlSerializer(ObjectToSerialize.GetType());
+
+            using (StringWriter textWriter = new StringWriter())
+            {
+                xmlSerializer.Serialize(textWriter, ObjectToSerialize);
+                return textWriter.ToString();
+            }
+        }
+    }
+
     class Program
     {
         static void Main(string[] args)
         {
             Console.WriteLine("Hello World!");
+
+
+       //     Log.Logger = new LoggerConfiguration()
+       //.Enrich.FromLogContext()
+       //.WriteTo.Console()
+       //.CreateLogger();
 
             LastRun l = new LastRun("Bowser", 45, 25);
             Stream stream = File.Open("AnimalData.dat", FileMode.Create);
@@ -83,5 +115,7 @@ namespace UtilHelperLib
             Console.WriteLine("Hello World!");
 
         }
+
+        
     }
 }
